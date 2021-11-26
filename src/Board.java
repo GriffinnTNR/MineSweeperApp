@@ -166,95 +166,54 @@ public class Board extends JPanel {
         }
     }
 
-    private void find_empty_cells(int j) {
+    private void findEmptyCells(int j) {
 
         int current_col = j % N_COLS;
         int cell;
 
-        if (current_col > 0) {
+        if (current_col > 0)
+        {
             cell = j - N_COLS - 1;
-            if (cell >= 0) {
-                if (field[cell] > MINE_CELL) {
-                    field[cell] -= COVER_FOR_CELL;
-                    if (field[cell] == EMPTY_CELL) {
-                        find_empty_cells(cell);
-                    }
-                }
-            }
-
+            if (cell >= 0)
+                helpToFindEmptyCells(cell);
             cell = j - 1;
-            if (cell >= 0) {
-                if (field[cell] > MINE_CELL) {
-                    field[cell] -= COVER_FOR_CELL;
-                    if (field[cell] == EMPTY_CELL) {
-                        find_empty_cells(cell);
-                    }
-                }
-            }
-
+            if (cell >= 0)
+                helpToFindEmptyCells(cell);
             cell = j + N_COLS - 1;
-            if (cell < allCells) {
-                if (field[cell] > MINE_CELL) {
-                    field[cell] -= COVER_FOR_CELL;
-                    if (field[cell] == EMPTY_CELL) {
-                        find_empty_cells(cell);
-                    }
-                }
-            }
+            if (cell < allCells)
+                helpToFindEmptyCells(cell);
         }
 
         cell = j - N_COLS;
-        if (cell >= 0) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
-                }
-            }
-        }
+        if (cell >= 0)
+            helpToFindEmptyCells(cell);
 
         cell = j + N_COLS;
-        if (cell < allCells) {
-            if (field[cell] > MINE_CELL) {
-                field[cell] -= COVER_FOR_CELL;
-                if (field[cell] == EMPTY_CELL) {
-                    find_empty_cells(cell);
-                }
-            }
-        }
+        if (cell < allCells)
+            helpToFindEmptyCells(cell);
 
-        if (current_col < (N_COLS - 1)) {
+        if (current_col < (N_COLS - 1))
+        {
             cell = j - N_COLS + 1;
-            if (cell >= 0) {
-                if (field[cell] > MINE_CELL) {
-                    field[cell] -= COVER_FOR_CELL;
-                    if (field[cell] == EMPTY_CELL) {
-                        find_empty_cells(cell);
-                    }
-                }
-            }
-
+            if (cell >= 0)
+                helpToFindEmptyCells(cell);
             cell = j + N_COLS + 1;
-            if (cell < allCells) {
-                if (field[cell] > MINE_CELL) {
-                    field[cell] -= COVER_FOR_CELL;
-                    if (field[cell] == EMPTY_CELL) {
-                        find_empty_cells(cell);
-                    }
-                }
-            }
-
+            if (cell < allCells)
+                helpToFindEmptyCells(cell);
             cell = j + 1;
-            if (cell < allCells) {
-                if (field[cell] > MINE_CELL) {
-                    field[cell] -= COVER_FOR_CELL;
-                    if (field[cell] == EMPTY_CELL) {
-                        find_empty_cells(cell);
-                    }
-                }
-            }
+            if (cell < allCells)
+                helpToFindEmptyCells(cell);
         }
 
+    }
+    public void helpToFindEmptyCells(int cell)
+    {
+        if (field[cell] > MINE_CELL) {
+            field[cell] -= COVER_FOR_CELL;
+            if (field[cell] == EMPTY_CELL) {
+                findEmptyCells(cell);
+            }
+        }
     }
 
     @Override
@@ -305,7 +264,7 @@ public class Board extends JPanel {
             inGame = false;
             finish = Instant.now();
             int time = (int) Duration.between(start, finish).toSeconds();
-            statusBar.setText("Game won, Time: " + secondsToString(time));
+            statusBar.setText("Game won, Time: " + Converter.secondsToString(time));
             if(currentUser.bestTimeInSeconds == null || currentUser.bestTimeInSeconds > time)
             {
                 currentUser.bestTimeInSeconds = time;
@@ -317,25 +276,17 @@ public class Board extends JPanel {
         } else if (!inGame) {
 
             finish = Instant.now();
-            statusBar.setText("Game lost, click somewhere on board if you want to restart");
-        }
-    }
-    private String secondsToString(long seconds)
-    {
-        if(seconds >= 3600)
-            return "Don't play this game anymore please!!!";
-        else
-        {
-            long MM = seconds / 60;
-            long SS = seconds % 60;
-            return String.format("%02d:%02d", MM, SS);
+            statusBar.setText("<html>Game lost,<br>click somewhere on board if you want to restart</html>");
         }
     }
     private void updateLeaderboardPanel(JPanel panel)
     {
         panel.removeAll();
+        panel.add(new CustomLabel("     ",SwingConstants.CENTER, new Font("Monospaced", Font.BOLD, 24)));
+        panel.add(new CustomLabel("Leaderboard",SwingConstants.CENTER, new Font("Monospaced", Font.BOLD, 24)));
+        panel.add(new CustomLabel("     ",SwingConstants.CENTER, new Font("Monospaced", Font.BOLD, 20)));
         for (User users : sqlService.users.stream().filter(x -> x.bestTimeInSeconds != null).sorted(Comparator.comparingInt(User::getBestTimeInSeconds)).limit(10).toList())
-            panel.add(new CustomLabel(users.username + ":" + users.bestTimeInSeconds,SwingConstants.LEFT, new Font("Monospaced",Font.PLAIN,18)));
+            panel.add(new CustomLabel(users.username + " -> " + Converter.secondsToString(users.bestTimeInSeconds),SwingConstants.LEFT, new Font("Monospaced",Font.PLAIN,18)));
         panel.updateUI();
     }
 
@@ -403,7 +354,7 @@ public class Board extends JPanel {
                         }
 
                         if (field[(cRow * N_COLS) + cCol] == EMPTY_CELL) {
-                            find_empty_cells((cRow * N_COLS) + cCol);
+                            findEmptyCells((cRow * N_COLS) + cCol);
                         }
                     }
                 }

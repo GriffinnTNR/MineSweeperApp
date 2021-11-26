@@ -11,7 +11,7 @@ public class MainPanel extends JPanel
     public MainPanel(SQLService sqlService)
     {
         this.sqlService = sqlService;
-        setBounds(0,0,800,600);
+        setBounds(0,0,800,620);
         setLayout(null);
         setBackground(new Color(77, 14, 27));
         initLoginPanel();
@@ -36,13 +36,11 @@ public class MainPanel extends JPanel
     public void initGamePanel()
     {
         JPanel leaderboardPanel = new CustomPanel(0,30,200,570);
-        JLabel userLabel = new CustomLabel(currentUser.username,0,0,200,30,SwingConstants.CENTER,new Font("Monospaced",Font.BOLD,20));
-        //JLabel userLabel = new JLabel(currentUser.username, SwingConstants.CENTER);
-        //userLabel.setBounds(0,0,200,30);
-        JLabel statusBar = new CustomLabel("",200,0,600,30,SwingConstants.LEFT,new Font("Monospaced",Font.PLAIN,16));
+        JLabel userLabel = new CustomLabel(currentUser.username,0,0,200,30,SwingConstants.CENTER,new Font("Monospaced",Font.BOLD,24));
+        JLabel statusBar = new CustomLabel("",240,0,600,60,SwingConstants.LEFT,new Font("Monospaced",Font.PLAIN,16));
 
         JPanel board = new Board(statusBar, sqlService, currentUser,leaderboardPanel);
-        board.setBounds(240,40,510,510);
+        board.setBounds(240,60,510,510);
         board.setBackground(new Color(77, 14, 27));
 
         add(userLabel);

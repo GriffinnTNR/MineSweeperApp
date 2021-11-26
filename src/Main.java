@@ -7,7 +7,7 @@ public class Main
         SQLService sql = new SQLService();
         JFrame frame = new JFrame("Minesweeper");
 
-        frame.setSize(800,600);
+        frame.setSize(800,620);
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
