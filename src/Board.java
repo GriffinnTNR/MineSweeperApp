@@ -60,7 +60,7 @@ public class Board extends JPanel {
 
     private void initBoard() {
 
-        setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_WIDTH));
+        setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
 
         img = new Image[NUM_IMAGES];
 
