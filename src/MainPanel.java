@@ -2,7 +2,9 @@ import CustomControls.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Comparator;
+import java.util.Locale;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainPanel extends JPanel
 {
@@ -23,8 +25,8 @@ public class MainPanel extends JPanel
         JButton loginButton = new CustomButton("Login",300,300,200,40);
         JButton registerButton = new CustomButton("Register",300,350,200,40);
 
-        registerButton.addActionListener(e -> doRegistration(usernameText.getText(),String.valueOf(passwordText.getPassword())));
-        loginButton.addActionListener(e -> doLogin(usernameText.getText(),String.valueOf(passwordText.getPassword())));
+        registerButton.addActionListener(e -> doRegistration(usernameText.getText().substring(0,1).toUpperCase()+usernameText.getText().substring(1),Converter.hashPassword(String.valueOf(passwordText.getPassword()))));
+        loginButton.addActionListener(e -> doLogin(usernameText.getText().substring(0,1).toUpperCase()+usernameText.getText().substring(1),Converter.hashPassword(String.valueOf(passwordText.getPassword()))));
 
         add(usernameText);
         add(passwordText);
@@ -54,7 +56,7 @@ public class MainPanel extends JPanel
         currentUser = sqlService.users.stream().filter(x-> x.username.equals(username) && x.password.equals(password)).findFirst().orElse(new User());
         if(currentUser.id == 0)
         {
-            System.out.println("Invalid password or username");
+            showMessageDialog(null, "Invalid password or username");
         }
         else
         {
@@ -65,11 +67,29 @@ public class MainPanel extends JPanel
     }
     public void doRegistration(String username, String password)
     {
-        if(username != null && password != null) {
+        if(isUsernameValid(username,password)) {
             sqlService.addUser(username, password);
             doLogin(username, password);
         }
+    }
+    public boolean isUsernameValid(String username, String password)
+    {
+        if(sqlService.users.stream().filter(x-> x.username.equals(username)).findFirst().orElse(new User()).id != 0)
+        {
+            showMessageDialog(null, "This username is already taken");
+            return false;
+        }
+        else if(username.equals(null) || password.equals(null) || username.equals("") || password.equals(""))
+        {
+            showMessageDialog(null, "Username or password is empty");
+            return false;
+        }
+        else if(username.length() > 9)
+        {
+            showMessageDialog(null, "Username is too long (Max: 9)");
+            return false;
+        }
         else
-            System.out.print("Username or password is null");
+            return true;
     }
 }

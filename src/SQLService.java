@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 public class SQLService
 {
     Connection connection;
@@ -19,6 +21,7 @@ public class SQLService
         } catch (SQLException e)
         {
             System.out.println("Can't connect to SQL Server");
+            showMessageDialog(null, "Can't connect to SQL Server");
             e.printStackTrace();
         }
 

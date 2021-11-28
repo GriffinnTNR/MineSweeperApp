@@ -26,7 +26,7 @@ public class Board extends JPanel {
     private final int DRAW_MARK = 11;
     private final int DRAW_WRONG_MARK = 12;
 
-    private final int N_MINES = 4;
+    private final int N_MINES = 40;
     private final int N_ROWS = 17;
     private final int N_COLS = 17;
 
@@ -264,7 +264,7 @@ public class Board extends JPanel {
             inGame = false;
             finish = Instant.now();
             int time = (int) Duration.between(start, finish).toSeconds();
-            statusBar.setText("Game won, Time: " + Converter.secondsToString(time));
+            statusBar.setText("<html>Game won, Time: " + Converter.secondsToString(time) + "<br>click somewhere on board if you want to restart</html>");
             if(currentUser.bestTimeInSeconds == null || currentUser.bestTimeInSeconds > time)
             {
                 currentUser.bestTimeInSeconds = time;
