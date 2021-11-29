@@ -12,6 +12,6 @@ public class Main
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(new MainPanel(sql));
+        frame.setContentPane(new MainPanel());
     }
 }

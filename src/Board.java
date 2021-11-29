@@ -46,12 +46,9 @@ public class Board extends JPanel {
     Instant finish = Instant.now();
 
     User currentUser;
-    SQLService sqlService;
 
-
-    public Board(JLabel statusBar, SQLService sqlService, User current, JPanel leaderboardPanel) {
+    public Board(JLabel statusBar, User current, JPanel leaderboardPanel) {
         currentUser = current;
-        this.sqlService = sqlService;
         this.statusBar = statusBar;
         this.leaderboardPanel = leaderboardPanel;
         updateLeaderboardPanel(this.leaderboardPanel);
@@ -268,8 +265,8 @@ public class Board extends JPanel {
             if(currentUser.bestTimeInSeconds == null || currentUser.bestTimeInSeconds > time)
             {
                 currentUser.bestTimeInSeconds = time;
-                sqlService.updateUser(currentUser);
-                sqlService.getAllUsers();
+                SQLService.sqlService.updateUser(currentUser);
+                SQLService.sqlService.getAllUsers();
                 updateLeaderboardPanel(leaderboardPanel);
             }
 
@@ -285,7 +282,7 @@ public class Board extends JPanel {
         panel.add(new CustomLabel("     ",SwingConstants.CENTER, new Font("Monospaced", Font.BOLD, 24)));
         panel.add(new CustomLabel("Leaderboard",SwingConstants.CENTER, new Font("Monospaced", Font.BOLD, 24)));
         panel.add(new CustomLabel("     ",SwingConstants.CENTER, new Font("Monospaced", Font.BOLD, 20)));
-        for (User users : sqlService.users.stream().filter(x -> x.bestTimeInSeconds != null).sorted(Comparator.comparingInt(User::getBestTimeInSeconds)).limit(10).toList())
+        for (User users : SQLService.sqlService.users.stream().filter(x -> x.bestTimeInSeconds != null).sorted(Comparator.comparingInt(User::getBestTimeInSeconds)).limit(10).toList())
             panel.add(new CustomLabel(users.username + " -> " + Converter.secondsToString(users.bestTimeInSeconds),SwingConstants.LEFT, new Font("Monospaced",Font.PLAIN,18)));
         panel.updateUI();
     }

@@ -2,17 +2,14 @@ import CustomControls.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Locale;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainPanel extends JPanel
 {
-    SQLService sqlService;
     User currentUser;
-    public MainPanel(SQLService sqlService)
+    public MainPanel()
     {
-        this.sqlService = sqlService;
         setBounds(0,0,800,620);
         setLayout(null);
         setBackground(new Color(77, 14, 27));
@@ -41,7 +38,7 @@ public class MainPanel extends JPanel
         JLabel userLabel = new CustomLabel(currentUser.username,0,0,200,30,SwingConstants.CENTER,new Font("Monospaced",Font.BOLD,24));
         JLabel statusBar = new CustomLabel("",240,0,600,60,SwingConstants.LEFT,new Font("Monospaced",Font.PLAIN,16));
 
-        JPanel board = new Board(statusBar, sqlService, currentUser,leaderboardPanel);
+        JPanel board = new Board(statusBar, currentUser,leaderboardPanel);
         board.setBounds(240,60,510,510);
         board.setBackground(new Color(77, 14, 27));
 
@@ -53,7 +50,7 @@ public class MainPanel extends JPanel
     }
     public void doLogin(String username, String password)
     {
-        currentUser = sqlService.users.stream().filter(x-> x.username.equals(username) && x.password.equals(password)).findFirst().orElse(new User());
+        currentUser = SQLService.sqlService.users.stream().filter(x-> x.username.equals(username) && x.password.equals(password)).findFirst().orElse(new User());
         if(currentUser.id == 0)
         {
             showMessageDialog(null, "Invalid password or username");
@@ -68,13 +65,13 @@ public class MainPanel extends JPanel
     public void doRegistration(String username, String password)
     {
         if(isUsernameValid(username,password)) {
-            sqlService.addUser(username, password);
+            SQLService.sqlService.addUser(username, password);
             doLogin(username, password);
         }
     }
     public boolean isUsernameValid(String username, String password)
     {
-        if(sqlService.users.stream().filter(x-> x.username.equals(username)).findFirst().orElse(new User()).id != 0)
+        if(SQLService.sqlService.users.stream().filter(x-> x.username.equals(username)).findFirst().orElse(new User()).id != 0)
         {
             showMessageDialog(null, "This username is already taken");
             return false;
