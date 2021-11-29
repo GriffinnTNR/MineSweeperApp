@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.util.ArrayList;
 
+import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class SQLService
@@ -23,6 +24,7 @@ public class SQLService
             System.out.println("Can't connect to SQL Server");
             showMessageDialog(null, "Can't connect to SQL Server");
             e.printStackTrace();
+            exit(503);
         }
 
         getAllUsers();
