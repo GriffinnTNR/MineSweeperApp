@@ -88,7 +88,7 @@ public class Board extends JPanel {
             field[i] = COVER_FOR_CELL;
         }
 
-        statusBar.setText("Marks left: "+Integer.toString(minesLeft));
+        statusBar.setText("Mines left: "+Integer.toString(minesLeft));
 
         int i = 0;
 
@@ -319,16 +319,16 @@ public class Board extends JPanel {
                             if (minesLeft > 0) {
                                 field[(cRow * N_COLS) + cCol] += MARK_FOR_CELL;
                                 minesLeft--;
-                                String msg = "Marks left: " + Integer.toString(minesLeft);
+                                String msg = "Mines left: " + Integer.toString(minesLeft);
                                 statusBar.setText(msg);
                             } else {
-                                statusBar.setText("No marks left");
+                                statusBar.setText("No mines left");
                             }
                         } else {
 
                             field[(cRow * N_COLS) + cCol] -= MARK_FOR_CELL;
                             minesLeft++;
-                            String msg = "Marks left: " + Integer.toString(minesLeft);
+                            String msg = "Mines left: " + Integer.toString(minesLeft);
                             statusBar.setText(msg);
                         }
                     }
