@@ -50,7 +50,7 @@ public class MainPanel extends JPanel
     }
     public void doLogin(String username, String password)
     {
-        currentUser = SQLService.sqlService.users.stream().filter(x-> x.username.equals(username) && x.password.equals(password)).findFirst().orElse(new User());
+        currentUser = SQLService.getInstance().users.stream().filter(x-> x.username.equals(username) && x.password.equals(password)).findFirst().orElse(new User());
         if(currentUser.id == 0)
         {
             showMessageDialog(null, "Invalid password or username");
@@ -65,13 +65,13 @@ public class MainPanel extends JPanel
     public void doRegistration(String username, String password)
     {
         if(isUsernameValid(username,password)) {
-            SQLService.sqlService.addUser(username, password);
+            SQLService.getInstance().addUser(username, password);
             doLogin(username, password);
         }
     }
     public boolean isUsernameValid(String username, String password)
     {
-        if(SQLService.sqlService.users.stream().filter(x-> x.username.equals(username)).findFirst().orElse(new User()).id != 0)
+        if(SQLService.getInstance().users.stream().filter(x-> x.username.equals(username)).findFirst().orElse(new User()).id != 0)
         {
             showMessageDialog(null, "This username is already taken");
             return false;

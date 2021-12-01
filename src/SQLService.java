@@ -6,11 +6,15 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class SQLService
 {
-    public static SQLService sqlService;
+    private static final SQLService instance = new SQLService();
     Connection connection;
     public ArrayList<User> users = new ArrayList<User>();
 
-    public SQLService()
+    public static SQLService getInstance()
+    {
+        return instance;
+    }
+    private SQLService()
     {
         String url = "jdbc:sqlserver://griffinn.duckdns.org\\SQLEXPRESS:54886;databaseName=MinesweeperLogin";
         String username = "User";
@@ -29,7 +33,6 @@ public class SQLService
         }
 
         getAllUsers();
-        sqlService = this;
     }
     public void addUser(String username, String password)
     {
@@ -45,7 +48,6 @@ public class SQLService
             e.printStackTrace();
         }
         getAllUsers();
-        sqlService = this;
     }
     public void getAllUsers()
     {
@@ -70,7 +72,6 @@ public class SQLService
             e.printStackTrace();
         }
         this.users = users;
-        sqlService = this;
     }
     public void updateUser(User currentUser)
     {
@@ -82,6 +83,5 @@ public class SQLService
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        sqlService = this;
     }
 }
